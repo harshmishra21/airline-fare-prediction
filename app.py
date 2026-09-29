@@ -501,18 +501,19 @@ elif page == "📊 Route & Airline Comparator":
 # PAGE 4: ROUTE PRICE MATRIX
 # ---------------------------------------------------------
 elif page == "📉 Route Price Matrix":
-    st.markdown("### 📉 Inter-City Route Heatmap Matrix")
+    st.markdown("### 📉 Inter-City Route Fare Matrix & Analytics")
     st.markdown("Analyze estimated average fares across all 30 metro route combinations.")
 
     c1, c2 = st.columns(2)
     with c1:
         flight_class = st.selectbox("Select Cabin Class", options["classes"], index=0, key="mx_cls")
     with c2:
-        days_left = st.slider("Days Remaining", 1, 50, 20, key="mx_days")
+        days_left = st.slider("Days Remaining Before Flight", 1, 50, 20, key="mx_days")
 
     matrix_rows = []
-    for src in options["cities"]:
-        for dst in options["cities"]:
+    cities_list = options["cities"]
+    for src in cities_list:
+        for dst in cities_list:
             if src != dst:
                 matrix_rows.append({
                     "duration": 2.5,
@@ -529,19 +530,82 @@ elif page == "📉 Route Price Matrix":
 
     matrix_df = pd.DataFrame(matrix_rows)
     matrix_df["Predicted Fare"] = model.predict(matrix_df)
+    
+    # Pivot for Heatmap
     pivot_df = matrix_df.pivot(index="source_city", columns="destination_city", values="Predicted Fare")
 
-    fig = px.imshow(
-        pivot_df,
-        labels=dict(x="Destination City", y="Source City", color="Estimated Fare (INR ₹)"),
-        x=pivot_df.columns,
-        y=pivot_df.index,
-        color_continuous_scale="Viridis",
-        aspect="auto",
-        title=f"Route Price Matrix ({flight_class}, {days_left} Days Before Departure)"
+    # Build explicit text matrix with formatted numbers inside EVERY cell
+    text_matrix = []
+    for s in cities_list:
+        row_text = []
+        for d in cities_list:
+            if s == d:
+                row_text.append("—")
+            else:
+                val = pivot_df.loc[s, d]
+                row_text.append(f"₹{int(val):,}")
+        text_matrix.append(row_text)
+
+    # Plotly Heatmap with formatted numbers in each box
+    fig = go.Figure(data=go.Heatmap(
+        z=pivot_df.values,
+        x=cities_list,
+        y=cities_list,
+        text=text_matrix,
+        texttemplate="<b>%{text}</b>",
+        textfont=dict(size=12, color="#ffffff"),
+        colorscale="Viridis",
+        colorbar=dict(title="Estimated Fare (₹)"),
+        hoverongaps=False
+    ))
+    fig.update_layout(
+        title=f"Route Price Matrix ({flight_class}, {days_left} Days Out)",
+        xaxis_title="Destination City",
+        yaxis_title="Source City",
+        template="plotly_dark",
+        height=520,
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)"
     )
-    fig.update_layout(template="plotly_dark", height=500, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
     st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown("---")
+    
+    # Top 5 Most Expensive vs Top 5 Cheapest Routes
+    st.markdown("#### 📊 Route Fare Rankings")
+    matrix_sorted = matrix_df.sort_values("Predicted Fare", ascending=False).copy()
+    matrix_sorted["Route Name"] = matrix_sorted["source_city"] + " ➔ " + matrix_sorted["destination_city"]
+
+    r_col1, r_col2 = st.columns(2)
+    with r_col1:
+        st.markdown("##### 🔴 Top 5 Most Expensive Routes")
+        top_exp = matrix_sorted.head(5)
+        fig_exp = px.bar(
+            top_exp,
+            x="Predicted Fare",
+            y="Route Name",
+            orientation="h",
+            color="Predicted Fare",
+            color_continuous_scale="Reds",
+            text_auto=",.0f"
+        )
+        fig_exp.update_layout(template="plotly_dark", height=320, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", showlegend=False, yaxis=dict(autorange="reversed"))
+        st.plotly_chart(fig_exp, use_container_width=True)
+
+    with r_col2:
+        st.markdown("##### 🟢 Top 5 Most Affordable Routes")
+        top_cheap = matrix_sorted.tail(5).sort_values("Predicted Fare")
+        fig_cheap = px.bar(
+            top_cheap,
+            x="Predicted Fare",
+            y="Route Name",
+            orientation="h",
+            color="Predicted Fare",
+            color_continuous_scale="Greens_r",
+            text_auto=",.0f"
+        )
+        fig_cheap.update_layout(template="plotly_dark", height=320, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)", showlegend=False, yaxis=dict(autorange="reversed"))
+        st.plotly_chart(fig_cheap, use_container_width=True)
 
 
 # ---------------------------------------------------------
