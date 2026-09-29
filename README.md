@@ -1,5 +1,6 @@
 # ✈️ Airline Fare Prediction & Dynamic Analytics Engine
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://airline-fare-prediction.streamlit.app/)
 [![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.30%2B-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.3%2B-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
@@ -8,6 +9,8 @@
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 
 An end-to-end Data Science and Machine Learning solution built to predict domestic airline ticket prices, model dynamic pricing lead-time curves ("When to Book"), and serve real-time predictions via an interactive Streamlit Web Application.
+
+🚀 **Live Web Application:** [https://airline-fare-prediction.streamlit.app/](https://airline-fare-prediction.streamlit.app/)
 
 ---
 
@@ -37,6 +40,8 @@ An end-to-end Data Science and Machine Learning solution built to predict domest
 Flight pricing is one of the most volatile dynamic markets in consumer commerce. Ticket prices fluctuate dramatically based on booking lead time, airline carrier, cabin class, flight duration, number of layover stops, and route popularity. 
 
 This project processes **300,153 flight booking records** covering top 6 Indian metro hubs (*Delhi, Mumbai, Bangalore, Kolkata, Hyderabad, Chennai*) scraped from EaseMyTrip. Using an end-to-end **Scikit-Learn Machine Learning Pipeline**, the system predicts expected ticket prices, establishes an **80% confidence bound**, identifies optimal booking windows before prices surge, and enables cross-airline comparison.
+
+> 🌐 **Access the Live Web Application:** [https://airline-fare-prediction.streamlit.app/](https://airline-fare-prediction.streamlit.app/)
 
 ### Primary Objectives
 1. **Accurate Fare Estimation:** Provide high-precision regression predictions ($R^2 = 0.9795$) across Economy and Business cabin classes.
@@ -238,21 +243,24 @@ Multiple regression models were trained and evaluated on an 80/20 train-test spl
 
 ## 💻 Streamlit Application Features
 
-The Streamlit interface (`app.py`) provides four distinct analytics tabs:
+The Streamlit interface (`app.py`) provides five distinct analytics tabs:
 
 1. **✈️ Fare Predictor:**
    - Input flight details: Airline, Source, Destination, Class, Departure/Arrival Time, Stops, Duration, Days Left.
    - Calculates predicted fare in INR (₹) with an empirical 80% confidence interval.
-   - Displays smart booking recommendations based on days left (Optimal, Moderate, or High Fare Alert).
+   - Displays a styled **Boarding Pass Card** and smart booking recommendations based on days left.
 
-2. **📈 Price Trend Analyzer ("When to Book"):**
-   - Generates a dynamic 50-day fare trajectory curve for any selected flight configuration.
+2. **📈 'When to Book' Trend:**
+   - Generates a dynamic 50-day fare trajectory area chart for any selected flight configuration.
    - Highlights the exact minimum fare point and recommended booking lead time.
 
-3. **📊 Route & Airline Comparison:**
-   - Plots interactive Plotly bar charts comparing price estimations across all 6 airlines for the same travel day and route.
+3. **📊 Route & Airline Comparator:**
+   - Plots interactive Plotly bar charts comparing price estimations across all operating carriers for the same travel day and route.
 
-4. **ℹ️ Model Performance & Analytics:**
+4. **📉 Route Price Matrix:**
+   - Displays a 6x6 inter-city price heatmap matrix with formatted currency values inside every cell (`₹28,913`), alongside Top 5 Most Expensive vs Top 5 Most Affordable route rankings.
+
+5. **ℹ️ Model Intelligence:**
    - Displays model architecture specifications, $R^2$, RMSE, MAE test metrics, and pipeline methodology.
 
 ---
@@ -280,7 +288,7 @@ Follow these step-by-step instructions to set up and run the project locally:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/[your-github-username]/airline-fare-prediction.git
+git clone https://github.com/harshmishra21/airline-fare-prediction.git
 cd airline-fare-prediction
 ```
 
@@ -311,39 +319,19 @@ Open your browser and navigate to `http://localhost:8501`.
 
 ## ☁️ Streamlit Community Cloud Deployment
 
-To deploy this project to **Streamlit Community Cloud** so anyone can access it online:
-
-1. **Push Repository to GitHub:** Ensure all core files (`app.py`, `model.joblib`, `meta.json`, `options.json`, `requirements.txt`, `.gitignore`, `README.md`) are committed and pushed to your public GitHub repository.
-2. **Sign In to Streamlit Cloud:** Visit [share.streamlit.io](https://share.streamlit.io/) and log in with your GitHub account.
-3. **Deploy New App:**
-   - Click **"Create app"** / **"New app"**.
-   - Select your GitHub repository (`airline-fare-prediction`) and branch (`main`).
-   - Set **Main file path** to `app.py`.
-   - Click **"Deploy!"**.
-4. **Share Live URL:** Streamlit will build your environment and provide a public URL (e.g. `https://[your-app-name].streamlit.app`).
+This project is deployed live on **Streamlit Community Cloud**:
+🌐 **[https://airline-fare-prediction.streamlit.app/](https://airline-fare-prediction.streamlit.app/)**
 
 ---
 
 ## 🐙 GitHub Publishing Workflow
 
-To push this repository to GitHub for the first time:
+To push updates to GitHub:
 
 ```bash
-# Initialize git repository
-git init
-
-# Add remote repository URL
-git remote add origin https://github.com/[your-github-username]/airline-fare-prediction.git
-
-# Stage all files
 git add .
-
-# Commit changes
-git commit -m "feat: complete airline fare prediction model and streamlit app"
-
-# Push to main branch
-git branch -M main
-git push -u origin main
+git commit -m "feat: update project documentation and app features"
+git push origin main
 ```
 
 ---
