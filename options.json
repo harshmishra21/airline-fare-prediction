@@ -1,0 +1,43 @@
+{
+  "airlines": [
+    "AirAsia",
+    "Air_India",
+    "GO_FIRST",
+    "Indigo",
+    "SpiceJet",
+    "Vistara"
+  ],
+  "cities": [
+    "Bangalore",
+    "Chennai",
+    "Delhi",
+    "Hyderabad",
+    "Kolkata",
+    "Mumbai"
+  ],
+  "departure_times": [
+    "Afternoon",
+    "Early_Morning",
+    "Evening",
+    "Late_Night",
+    "Morning",
+    "Night"
+  ],
+  "arrival_times": [
+    "Afternoon",
+    "Early_Morning",
+    "Evening",
+    "Late_Night",
+    "Morning",
+    "Night"
+  ],
+  "classes": [
+    "Business",
+    "Economy"
+  ],
+  "stops": [
+    0,
+    1,
+    2
+  ]
+}
